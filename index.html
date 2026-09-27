@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вино420 - Эксклюзивный Винный Бутик</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --transition-speed: 0.8s;
+            --font-primary: 'Georgia', 'Times New Roman', serif;
+            --font-secondary: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            overflow-x: hidden;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        /* Тема для красных вин */
+        body.red-theme {
+            background-color: #2c0a0a;
+            background-image: linear-gradient(135deg, #1a0505 0%, #4a1515 100%);
+            color: #f5e6d3;
+        }
+
+        /* Тема для белых вин */
+        body.white-theme {
+            background-color: #faf8f5;
+            background-image: linear-gradient(135deg, #ffffff 0%, #f0ebe3 100%);
+            color: #2c1810;
+        }
+
+        /* Индикатор прокрутки */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+
+        body.red-theme .scroll-indicator {
+            background: linear-gradient(90deg, #d4af37, #f0e68c);
+        }
+
+        body.white-theme .scroll-indicator {
+            background: linear-gradient(90deg, #8b4513, #d2691e);
+        }
+
+        /* Навигация */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-speed) ease;
+        }
+
+        body.red-theme nav {
+            background: rgba(44, 10, 10, 0.85);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        body.white-theme nav {
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+        }
+
+        .logo {
+            font-family: var(--font-primary);
+            font-size: 2.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        body.red-theme .logo {
+            color: #d4af37;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        body.white-theme .logo {
+            color: #8b4513;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s;
+            position: relative;
+        }
+
+        body.red-theme .nav-links a {
+            color: #e8d5b5;
+        }
+
+        body.white-theme .nav-links a {
+            color: #5c3a21;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            transition: width 0.3s;
+        }
+
+        body.red-theme .nav-links a::after {
+            background: #d4af37;
+        }
+
+        body.white-theme .nav-links a::after {
+            background: #8b4513;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Главный контейнер */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 20px 50px;
+        }
+
+        /* Заголовки секций */
+        .section-title {
+            font-family: var(--font-primary);
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+        }
+
+        body.red-theme .section-title {
+            color: #d4af37;
+        }
+
+        body.red-theme .section-title::after {
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+
+        body.white-theme .section-title {
+            color: #5c3a21;
+        }
+
+        body.white-theme .section-title::after {
+            background: linear-gradient(90deg, transparent, #8b4513, transparent);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 50px;
+            font-style: italic;
+        }
+
+        body.red-theme .section-subtitle {
+            color: #c9b8a0;
+        }
+
+        body.white-theme .section-subtitle {
+            color: #8b6f47;
+        }
+
+        /* Сетка вин */
+        .wine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        /* Карточка вина */
+        .wine-card {
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.red-theme .wine-card {
+            background: linear-gradient(145deg, rgba(74, 21, 21, 0.8), rgba(44, 10, 10, 0.9));
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        body.white-theme .wine-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(240,235,227,0.9));
+            border: 1px solid rgba(139, 69, 19, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .wine-card:hover {
+            transform: translateY(-8px);
+        }
+
+        body.red-theme .wine-card:hover {
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        body.white-theme .wine-card:hover {
+            box-shadow: 0 20px 40px rgba(139, 69, 19, 0.15);
+        }
+
+        .wine-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        body.red-theme .wine-badge {
+            background: #d4af37;
+            color: #2c0a0a;
+        }
+
+        body.white-theme .wine-badge {
+            background: #8b4513;
+            color: white;
+        }
+
+        .wine-name {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            line-height: 1.2;
+            padding-right: 80px;
+        }
+
+        body.red-theme .wine-name {
+            color: #f5e6d3;
+        }
+
+        body.white-theme .wine-name {
+            color: #3d2817;
+        }
+
+        .wine-region {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        body.red-theme .wine-region {
+            color: #d4af37;
+        }
+
+        body.white-theme .wine-region {
+            color: #a0522d;
+        }
+
+        .wine-description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        body.red-theme .wine-description {
+            color: #d4c4b0;
+        }
+
+        body.white-theme .wine-description {
+            color: #5c4a3d;
+        }
+
+        .wine-characteristics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .characteristic {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        body.red-theme .characteristic {
+            color: #c9b8a0;
+        }
+
+        body.white-theme .characteristic {
+            color: #8b7355;
+        }
+
+        .wine-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-family: var(--font-primary);
+        }
+
+        body.red-theme .wine-price {
+            color: #d4af37;
+        }
+
+        body.white-theme .wine-price {
+            color: #8b4513;
+        }
+
+        .price-unit {
+            font-size: 0.9rem;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        body.red-theme .order-btn {
+            background: linear-gradient(135deg, #d4af37, #b8941f);
+            color: #2c0a0a;
+        }
+
+        body.red-theme .order-btn:hover {
+            background: linear-gradient(135deg, #e5c048, #d4af37);
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        body.white-theme .order-btn {
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+        }
+
+        body.white-theme .order-btn:hover {
+            background: linear-gradient(135deg, #a0522d, #cd853f);
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Разделитель секций */
+        .section-divider {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .divider-icon {
+            font-size: 2.5rem;
+            z-index: 2;
+            padding: 0 30px;
+            transition: background 0.8s, color 0.8s;
+        }
+
+        body.red-theme .divider-icon {
+            color: #d4af37;
+            background: #2c0a0a;
+        }
+
+        body.white-theme .divider-icon {
+            color: #8b4513;
+            background: #faf8f5;
+        }
+
+        .divider-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+        }
+
+        body.red-theme .divider-line {
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+        }
+
+        body.white-theme .divider-line {
+            background: linear-gradient(90deg, transparent, #8b4513, transparent);
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body.red-theme .modal-content {
+            background: linear-gradient(145deg, #3a1515, #2c0a0a);
+            border: 2px solid #d4af37;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            color: #f5e6d3;
+        }
+
+        body.white-theme .modal-content {
+            background: linear-gradient(145deg, #ffffff, #f5f0eb);
+            border: 2px solid #8b4513;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            color: #2c1810;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+            line-height: 1;
+        }
+
+        body.red-theme .close-modal {
+            color: #d4af37;
+        }
+
+        body.white-theme .close-modal {
+            color: #8b4513;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        body.red-theme .modal-title {
+            color: #d4af37;
+        }
+
+        body.white-theme .modal-title {
+            color: #5c3a21;
+        }
+
+        .selected-wine-info {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        body.red-theme .selected-wine-info {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid #d4af37;
+        }
+
+        body.white-theme .selected-wine-info {
+            background: rgba(139, 69, 19, 0.05);
+            border-left: 4px solid #8b4513;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        body.red-theme .form-group label {
+            color: #d4af37;
+        }
+
+        body.white-theme .form-group label {
+            color: #5c3a21;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid;
+            font-family: var(--font-secondary);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        body.red-theme .form-group input,
+        body.red-theme .form-group textarea {
+            background: rgba(0,0,0,0.4);
+            border-color: #d4af37;
+            color: #f5e6d3;
+        }
+
+        body.white-theme .form-group input,
+        body.white-theme .form-group textarea {
+            background: rgba(255,255,255,0.9);
+            border-color: #d4c4b0;
+            color: #3d2817;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+        }
+
+        body.red-theme .form-group input:focus,
+        body.red-theme .form-group textarea:focus {
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            border-color: #f0e68c;
+        }
+
+        body.white-theme .form-group input:focus,
+        body.white-theme .form-group textarea:focus {
+            box-shadow: 0 0 10px rgba(139, 69, 19, 0.3);
+            border-color: #8b4513;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        body.red-theme .submit-btn {
+            background: #d4af37;
+            color: #2c0a0a;
+        }
+
+        body.white-theme .submit-btn {
+            background: #8b4513;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        body.red-theme .submit-btn:hover {
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        body.white-theme .submit-btn:hover {
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Футер */
+        footer {
+            padding: 60px 20px 40px;
+            text-align: center;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        body.red-theme footer {
+            background: linear-gradient(to top, #1a0505, transparent);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        body.white-theme footer {
+            background: linear-gradient(to top, #e8e0d5, transparent);
+            border-top: 1px solid rgba(139, 69, 19, 0.1);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .support-phone {
+            font-size: 2rem;
+            font-family: var(--font-primary);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        body.red-theme .support-phone {
+            color: #d4af37;
+        }
+
+        body.white-theme .support-phone {
+            color: #8b4513;
+        }
+
+        .support-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        body.red-theme .support-label {
+            color: #c9b8a0;
+        }
+
+        body.white-theme .support-label {
+            color: #8b7355;
+        }
+
+        .privacy-policy {
+            margin-top: 30px;
+            padding-top: 30px;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        body.red-theme .privacy-policy {
+            color: #8b7355;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        body.white-theme .privacy-policy {
+            color: #a08060;
+            border-top: 1px solid rgba(139, 69, 19, 0.1);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .wine-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+            
+            .logo {
+                font-size: 1.6rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .support-phone {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding-top: 90px;
+            }
+        }
+    </style>
+</head>
+<body class="red-theme">
+
+    <!-- Индикатор прокрутки -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- Навигация -->
+    <nav>
+        <div class="logo">🍷 ВИНО420</div>
+        <ul class="nav-links">
+            <li><a href="#red-wines">Красные вина</a></li>
+            <li><a href="#white-wines">Белые вина</a></li>
+            <li><a href="#contacts">Контакты</a></li>
+        </ul>
+    </nav>
+
+    <!-- Секция Красных Вин -->
+    <section id="red-wines" class="wine-section" data-theme="red">
+        <div class="container">
+            <h1 class="section-title">Коллекция Красных Вин</h1>
+            <p class="section-subtitle">Редчайшие винтажи со всего мира</p>
+
+            <div class="wine-grid">
+                <!-- Вино 1 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Эксклюзив</span>
+                    <h3 class="wine-name">Château Pétrus 1990</h3>
+                    <div class="wine-region">🇫🇷 Помероль, Бордо, Франция</div>
+                    <p class="wine-description">
+                        Легендарное вино из культового виноградника. Насыщенный букет черной смородины, 
+                        трюфелей и ванили. Танины шелковистые, послевкусие длится более 60 секунд.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Мерло 100%</span>
+                        <span class="characteristic">⏰ 1990 год</span>
+                        <span class="characteristic">🌡️ 18°C</span>
+                    </div>
+                    <div class="wine-price">
+                        1 250 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Château Pétrus 1990', '1 250 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Вино 2 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Limited</span>
+                    <h3 class="wine-name">Screaming Eagle 2015</h3>
+                    <div class="wine-region">🇺🇸 Напа Вэлли, Калифорния, США</div>
+                    <p class="wine-description">
+                        Культовое американское вино. Черника, черная смородина, графит и дорогие сигары.
+                        Производство ограничено 800 кейсами в год. Высокая инвестиционная ценность.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Каберне Совиньон</span>
+                        <span class="characteristic">⏰ 2015 год</span>
+                        <span class="characteristic">🏆 100 Parker Points</span>
+                    </div>
+                    <div class="wine-price">
+                        980 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Screaming Eagle 2015', '980 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Вино 3 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Раритет</span>
+                    <h3 class="wine-name">Romanée-Conti 2005</h3>
+                    <div class="wine-region">🇫🇷 Бургундия, Франция</div>
+                    <p class="wine-description">
+                        Монопольное вино с легендарного участка La Tâche. Красные ягоды, розмарин, 
+                        лесная подстилка и пряности. Один из самых дорогих сортов пино-нуар в мире.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Пино Нуар</span>
+                        <span class="characteristic">⏰ 2005 год</span>
+                        <span class="characteristic">📍 La Tâche Grand Cru</span>
+                    </div>
+                    <div class="wine-price">
+                        2 100 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Domaine de la Romanée-Conti 2005', '2 100 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Вино 4 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Премьер Крю</span>
+                    <h3 class="wine-name">Château Margaux 2000</h3>
+                    <div class="wine-region">🇫🇷 Марго, Бордо, Франция</div>
+                    <p class="wine-description">
+                        Первый крю классификации 1855 года. Идеальный винтаж. Ароматы фиалок, 
+                        черной смородины, ликера и древесины. Структура невероятная, потенциал хранения 50+ лет.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Купаж Каберне/Мерло</span>
+                        <span class="characteristic">⏰ 2000 год</span>
+                        <span class="characteristic">⭐ 100/100 Wine Spectator</span>
+                    </div>
+                    <div class="wine-price">
+                        845 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Château Margaux 2000', '845 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Вино 5 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Супертосканец</span>
+                    <h3 class="wine-name">Sassicaia 1985</h3>
+                    <div class="wine-region">🇮🇹 Тоскана, Италия</div>
+                    <p class="wine-description">
+                        Легендарный супертосканец. Черника, спелая вишня, кожа и табак. 
+                        Этот винтаж считается одним из лучших в истории винодельни Tenuta San Guido.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Каберне Совиньон</span>
+                        <span class="characteristic">⏰ 1985 год</span>
+                        <span class="characteristic">🇮🇹 Bolgheri Sassicaia DOC</span>
+                    </div>
+                    <div class="wine-price">
+                        920 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Sassicaia 1985', '920 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Вино 6 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Икона</span>
+                    <h3 class="wine-name">Penfolds Grange 1951</h3>
+                    <div class="wine-region">🇦🇺 Южная Австралия</div>
+                    <p class="wine-description">
+                        Первый винтаж легендарного Grange. Шедевр Макса Шуберта. 
+                        Шираз с нотками черного шоколада, кофе и пряностей. Музейная ценность.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Шираз 100%</span>
+                        <span class="characteristic">⏰ 1951 год</span>
+                        <span class="characteristic">🦘 Коллекционный выбор</span>
+                    </div>
+                    <div class="wine-price">
+                        3 500 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Penfolds Grange 1951', '3 500 000 ₽')">Заказать</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Разделитель -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <div class="divider-icon">✦</div>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- Секция Белых Вин -->
+    <section id="white-wines" class="wine-section" data-theme="white">
+        <div class="container">
+            <h1 class="section-title">Коллекция Белых Вин</h1>
+            <p class="section-subtitle">Элитные белые вина редчайших урожаев</p>
+
+            <div class="wine-grid">
+                <!-- Белое вино 1 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Grand Cru</span>
+                    <h3 class="wine-name">DRC Montrachet 2014</h3>
+                    <div class="wine-region">🇫🇷 Кот де Бон, Бургундия, Франция</div>
+                    <p class="wine-description">
+                        Культовое белое бургундское вино с легендарного виноградника. 
+                        Минеральность, мёд, орехи, ваниль и белый трюфель. Кремовая текстура и послевкусие бесконечности.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Шардоне</span>
+                        <span class="characteristic">⏰ 2014 год</span>
+                        <span class="characteristic">👑 Grand Cru</span>
+                    </div>
+                    <div class="wine-price">
+                        1 850 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('DRC Montrachet 2014', '1 850 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Белое вино 2 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Сотерн</span>
+                    <h3 class="wine-name">Château d'Yquem 2001</h3>
+                    <div class="wine-region">🇫🇷 Сотерн, Бордо, Франция</div>
+                    <p class="wine-description">
+                        Единственный Premier Cru Supérieur классификации 1855 года. 
+                        Ботритизированное вино с нотами абрикоса, меда, ванили и карамели. 
+                        Идеальный баланс сахара и кислотности.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Семильон / Совиньон</span>
+                        <span class="characteristic">⏰ 2001 год</span>
+                        <span class="characteristic">🏆 100/100 Robert Parker</span>
+                    </div>
+                    <div class="wine-price">
+                        1 450 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Château d\'Yquem 2001', '1 450 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Белое вино 3 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Культовое</span>
+                    <h3 class="wine-name">Screaming Eagle Blanc 2018</h3>
+                    <div class="wine-region">🇺🇸 Оуквилл, Напа Вэлли, США</div>
+                    <p class="wine-description">
+                        Одно из самых редких и дорогих белых вин мира. Производится в 
+                        микроскопических количествах. Грейпфрут, белые цветы, минеральность и сливочность.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Совиньон Блан</span>
+                        <span class="characteristic">⏰ 2018 год</span>
+                        <span class="characteristic">📦 Лимитированный тираж</span>
+                    </div>
+                    <div class="wine-price">
+                        2 200 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Screaming Eagle Sauvignon Blanc 2018', '2 200 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Белое вино 4 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Десертное</span>
+                    <h3 class="wine-name">Kracher TBA №5 2010</h3>
+                    <div class="wine-region">🇦🇹 Бургенланд, Австрия</div>
+                    <p class="wine-description">
+                        Легендарное TBA от Алоиза Крахера. Ботритизированные груши, мёд, 
+                        экзотические фрукты и минеральность. Десертное вино высочайшего класса.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Шардоне / Траминер</span>
+                        <span class="characteristic">⏰ 2010 год</span>
+                        <span class="characteristic">🍯 TBA (300+ г/л сахара)</span>
+                    </div>
+                    <div class="wine-price">
+                        685 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Kracher TBA №5 2010', '685 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Белое вино 5 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Премьер Крю</span>
+                    <h3 class="wine-name">Pavillon Blanc Margaux 2009</h3>
+                    <div class="wine-region">🇫🇷 Марго, Бордо, Франция</div>
+                    <p class="wine-description">
+                        Белое вино от легендарного Château Margaux. Выращивается на 12 гектарах.
+                        Ароматы белых персиков, цветов апельсина, миндаля и ванили. 
+                        Огромный потенциал выдержки.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Совиньон Блан</span>
+                        <span class="characteristic">⏰ 2009 год</span>
+                        <span class="characteristic">🏰 Château Margaux</span>
+                    </div>
+                    <div class="wine-price">
+                        420 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Château Margaux Pavillon Blanc 2009', '420 000 ₽')">Заказать</button>
+                </div>
+
+                <!-- Белое вино 6 -->
+                <div class="wine-card">
+                    <span class="wine-badge">Немецкая Классика</span>
+                    <h3 class="wine-name">Egon Müller TBA 2010</h3>
+                    <div class="wine-region">🇩🇪 Вильтинген, Германия</div>
+                    <p class="wine-description">
+                        Святой Грааль для коллекционеров рислинга. Невероятная концентрация, 
+                        ботритис, кислотность и сладость в идеальном балансе. Мёд, абрикос, мокрый камень.
+                    </p>
+                    <div class="wine-characteristics">
+                        <span class="characteristic">🍇 Рислинг</span>
+                        <span class="characteristic">⏰ 2010 год</span>
+                        <span class="characteristic">🇩🇪 Мозель</span>
+                    </div>
+                    <div class="wine-price">
+                        1 120 000 ₽
+                        <span class="price-unit">/ литр</span>
+                    </div>
+                    <button class="order-btn" onclick="openOrderModal('Egon Müller TBA 2010', '1 120 000 ₽')">Заказать</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer id="contacts">
+        <div class="footer-content">
+            <div class="support-label">Служба поддержки 24/7</div>
+            <div class="support-phone">8 (989) 898-98-99</div>
+            <p style="margin-bottom: 20px; opacity: 0.8; line-height: 1.6;">
+                Персональные консультации по выбору вина<br>
+                Доставка по всему миру в специальных термоконтейнерах<br>
+                Гарантия подлинности и происхождения
+            </p>
+            
+            <div class="privacy-policy">
+                <strong>Политика конфиденциальности</strong><br>
+                Настоящая Политика конфиденциальности регулирует порядок обработки и защиты персональных данных покупателей винной галереи "ВИНО420". 
+                Мы гарантируем полную конфиденциальность всех предоставленных вами данных, включая ФИО, контактную информацию и историю покупок. 
+                Ваши данные используются исключительно для обработки заказов, доставки продукции и предоставления персонализированных рекомендаций. 
+                Мы не передаем персональную информацию третьим лицам без вашего явного согласия, за исключением случаев, предусмотренных законодательством РФ. 
+                Все сотрудники проходят обучение по работе с конфиденциальной информацией. 
+                Данные хранятся на защищенных серверах с использованием современных протоколов шифрования. 
+                Покупатель имеет право на доступ к своим данным, их редактирование и удаление по запросу. 
+                Используя сайт, вы соглашаетесь с условиями данной политики. Продажа алкогольной продукции несовершеннолетним запрещена.
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.6;">
+                © 2024 ВИНО420. Все права защищены. Чрезмерное употребление алкоголя вредит вашему здоровью. 18+
+            </p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно заказа -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeOrderModal()">&times;</span>
+            <h2 class="modal-title">Оформление заказа</h2>
+            
+            <div class="selected-wine-info">
+                <strong>Выбранное вино:</strong><br>
+                <span id="selectedWineName" style="font-size: 1.2rem; font-weight: bold;"></span><br>
+                <span id="selectedWinePrice" style="opacity: 0.9;"></span>
+            </div>
+
+            <form id="orderForm" onsubmit="submitOrder(event)">
+                <div class="form-group">
+                    <label for="fullName">ФИО</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="Иванов Иван Иванович">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Контактный телефон</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="+7 (999) 999-99-99">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="example@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Количество (литров)</label>
+                    <input type="number" id="quantity" name="quantity" min="0.75" max="100" step="0.75" value="0.75" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Адрес доставки</label>
+                    <textarea id="address" name="address" rows="3" required placeholder="Город, улица, дом, квартира"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Комментарий к заказу</label>
+                    <textarea id="comment" name="comment" rows="2" placeholder="Пожелания по доставке"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Подтвердить заказ</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ВАШИ ДАННЫЕ ДЛЯ TELEGRAM
+        const TELEGRAM_BOT_TOKEN = '8946559988:AAG2mlu9ha29S9tqOl4DasPWj8-e6L-i97Q';
+        const TELEGRAM_CHAT_ID = '8296730713';
+
+        // Управление темой при скролле
+        const redSection = document.getElementById('red-wines');
+        const whiteSection = document.getElementById('white-wines');
+        const body = document.body;
+        const scrollIndicator = document.getElementById('scrollIndicator');
+
+        const themeObserverOptions = {
+            root: null,
+            rootMargin: '-30% 0px -30% 0px',
+            threshold: 0
+        };
+
+        const themeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const theme = entry.target.getAttribute('data-theme');
+                    if (theme === 'red') {
+                        body.classList.remove('white-theme');
+                        body.classList.add('red-theme');
+                    } else {
+                        body.classList.remove('red-theme');
+                        body.classList.add('white-theme');
+                    }
+                }
+            });
+        }, themeObserverOptions);
+
+        if (redSection) themeObserver.observe(redSection);
+        if (whiteSection) themeObserver.observe(whiteSection);
+
+        // Индикатор прокрутки
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollIndicator.style.width = scrolled + "%";
+        });
+
+        // Модальное окно
+        const modal = document.getElementById('orderModal');
+        const selectedWineName = document.getElementById('selectedWineName');
+        const selectedWinePrice = document.getElementById('selectedWinePrice');
+
+        function openOrderModal(wineName, price) {
+            selectedWineName.textContent = wineName;
+            selectedWinePrice.textContent = 'Цена: ' + price + ' за литр';
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOrderModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeOrderModal();
+            }
+        }
+
+        // Отправка формы напрямую в Telegram
+        function submitOrder(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Сообщение для Telegram
+            const message = `
+🍷 <b>НОВЫЙ ЗАКАЗ — ВИНО420</b>
+
+<b>Товар:</b> ${selectedWineName.textContent}
+<b>Цена:</b> ${selectedWinePrice.textContent}
+<b>Объём:</b> ${data.quantity} л.
+
+👤 <b>ФИО:</b> ${data.fullName}
+📞 <b>Телефон:</b> ${data.phone}
+✉️ <b>Email:</b> ${data.email}
+📍 <b>Адрес:</b> ${data.address}
+💬 <b>Комментарий:</b> ${data.comment || '—'}
+            `.trim();
+
+            const submitBtn = event.target.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+
+            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert(`✅ Спасибо, ${data.fullName}!\n\nВаш заказ на "${selectedWineName.textContent}" успешно принят.\nНаш сомелье свяжется с вами по номеру ${data.phone} в течение часа.`);
+                    closeOrderModal();
+                    event.target.reset();
+                } else {
+                    alert('⚠️ Ошибка отправки заказа. Пожалуйста, позвоните нам напрямую по телефону!');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('⚠️ Ошибка соединения с сервером. Проверьте интернет и попробуйте еще раз.');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalBtnText;
+            });
+        }
+
+        // Плавная прокрутка
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Анимация карточек
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 80);
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.wine-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            cardObserver.observe(card);
+        });
+
+        // Маска телефона
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+            if (!x[1]) {
+                e.target.value = '';
+                return;
+            }
+            e.target.value = !x[2] ? '+' + x[1] : '+' + x[1] + ' (' + x[2] + ') ' + x[3] + (x[4] ? '-' + x[4] : '') + (x[5] ? '-' + x[5] : '');
+        });
+    </script>
+</body>
+</html>
